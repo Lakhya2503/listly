@@ -18,9 +18,9 @@ app.use(express.urlencoded({extended : true}))
 
 createTables()
 
-import AuthRouter from './modules/user/user.route'
+import BaseRouter from './routes/route'
 
-app.use("/listly/api/v1/auth" , AuthRouter)
+app.use("/listly/api/v1" , BaseRouter)
 
 
 export default app;
