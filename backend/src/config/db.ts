@@ -10,13 +10,13 @@ export const database = new Client({
     port : ENV.DATABASE_PORT
 })
 
+
 const connectDb =  async ()=> {
  try {
-   await database.connect()
-   console.log("DATABASE CONNECTED SUCCESSFULLY "+ database.connection)
-
+      await database.connect()
+      console.log("📊 DATABASE CONNECTED SUCCESSFULLY "+ database.connection)
  } catch (error) {
-      console.error("ERROR ON CONNECTING DATABASE " + error);
+      console.error("❌ ERROR ON CONNECTING DATABASE " + error);
       process.exit(1)
  }
 }
