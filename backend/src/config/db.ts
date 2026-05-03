@@ -2,7 +2,7 @@ import { Client } from 'pg'
 import { ENV } from './env'
 
 
-const database = new Client({
+export const database = new Client({
     user: ENV.DATABASE_USERNAME,
     host: ENV.DATABASE_HOST,
     database : ENV.DATABASE_NAME,
