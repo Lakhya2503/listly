@@ -2,7 +2,7 @@ import express from "express"
 import cors from 'cors'
 import { ENV } from "./config/env";
 import cookieParser from 'cookie-parser'
-import { createTables } from "./config/createTables";
+import { createTables } from "./db/init";
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(express.urlencoded({extended : true}))
 
 createTables()
 
-import BaseRouter from './routes/route'
+import BaseRouter from './routes'
 
 app.use("/listly/api/v1" , BaseRouter)
 

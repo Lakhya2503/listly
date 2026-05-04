@@ -1,8 +1,8 @@
-import { Client } from 'pg'
+import { Pool } from 'pg'
 import { ENV } from './env'
 
 
-export const database = new Client({
+export const database = new Pool({
     user: ENV.DATABASE_USERNAME,
     host: ENV.DATABASE_HOST,
     database : ENV.DATABASE_NAME,
@@ -14,7 +14,7 @@ export const database = new Client({
 const connectDb =  async ()=> {
  try {
       await database.connect()
-      console.log("📊 DATABASE CONNECTED SUCCESSFULLY "+ database.connection)
+      console.log("📊 DATABASE CONNECTED SUCCESSFULLY "+ database)
  } catch (error) {
       console.error("❌ ERROR ON CONNECTING DATABASE " + error);
       process.exit(1)
