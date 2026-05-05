@@ -2,30 +2,31 @@ import bcrypt from "bcryptjs";
 import { database } from "../../config/db";
 import { ApiError } from "../../utils/ApiError";
 import { generateAccessToken, generateRefreshToken } from "../../utils/token";
+import { DbUser, userType } from './user.types';
 
 const generateAccessRefreshToken  = async(user:any) => {
-try {
+    try {
 
-      const accessToken =  generateAccessToken(user)
-      const refreshToken =  generateRefreshToken(user)
+          const accessToken =  generateAccessToken(user)
+          const refreshToken =  generateRefreshToken(user)
 
-      const updatedUser = await database.query(
-        `UPDATE users SET refreshToken = $1 WHERE id = $2 RETURNING *`,
-        [refreshToken, user?.id]
-      )
+          const updatedUser = await database.query(
+            `UPDATE users SET refreshToken = $1 WHERE id = $2 RETURNING *`,
+            [refreshToken, user?.id]
+          )
 
-      if(!updatedUser) {
-        throw new ApiError(404, "User can't find")
-      }
+          if(!updatedUser) {
+            throw new ApiError(404, "User can't find")
+          }
 
 
-    return {
-          accessToken,
-          refreshToken
+        return {
+              accessToken,
+              refreshToken
+        }
+    } catch (error : {message : string} | any) {
+        throw new ApiError(500, error.message)
     }
-} catch (error : {message : string} | any) {
-    throw new ApiError(500, error.message)
-}
 
 }
 
@@ -104,6 +105,27 @@ export const loginUserService = async({
   }
 }
 
-// export const logoutUserService = async(()=> {
+export const logoutUserService = (async(user:DbUser)=> {
 
+   const userLogout = await database.query(`
+            UPDATE users SET refreshToken =$1 WHERE id = $2 RETURNING *`,
+            ["", user.id]
+    )
+
+    if(userLogout.rows.length < 0) {
+      throw new ApiError(400, "User can't logout")
+    }
+
+})
+
+// export const userAvatarUpdateService = (async(user : userType, avatar : string )=>{
+
+//     const findUser = await database.query(`
+//                UPDATE users SET avatar =$1 WHERE id = $2 RETURNING *`,
+//             [avatar, user.id]
+//       `)
+
+//   return {
+
+//   }
 // })

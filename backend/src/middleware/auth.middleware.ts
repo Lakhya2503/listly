@@ -12,8 +12,8 @@ export const verifyJWT = async (
     ) => {
        const token = req.cookies?.accessToken;
 
-      if (!token) {
-        return next(new ApiError(401, "Access denied. You must be logged in to continue."));
+      if (!token ) {
+        return next(new ApiError(401, "token not found."));
       }
 
   try {

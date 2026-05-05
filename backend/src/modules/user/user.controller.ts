@@ -1,6 +1,7 @@
+import { database } from "../../config/db";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { asyncHandler } from "../../utils/asyncHandler";
-import { loginUserService, registerUserService } from './user.service';
+import { loginUserService, registerUserService, logoutUserService } from './user.service';
 
 const options = {
     httpOnly : true,
@@ -46,6 +47,8 @@ export const logoutUser =  asyncHandler(async(req,res)=>{
 
   // ? TODO : logout functionality
 
+  await logoutUserService(req.user)
+
   return res
   .status(200)
   .cookie("accessToken", options)
@@ -58,4 +61,17 @@ export const getUser =  asyncHandler(async(req,res)=>{
     const user =  req.user
 
   return res.status(200).json(new ApiResponse(200, user, "User fetchsuccessfully"))
+})
+
+export const updateUserAvatar = asyncHandler(async(req,res)=>{
+
+
+  const { avatar } = req.file
+
+  const user = req.user
+
+   await userAvatarUpdateService(avatar, user)
+
+
+  return res.status(200).json(new ApiResponse(200,{}, "User Avatar Update Successfully"))
 })
