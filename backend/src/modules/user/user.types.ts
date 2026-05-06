@@ -21,29 +21,28 @@ export interface AuthRequest extends Request {
 }
 
 
-// export interface userType {
-//             id: string,
-//             name:string ,
-//             email:string ,
-//             password:string,
-//             role:string ,
-//             avatar: string,
-//             refresh_token:string ,
-//             reset_password_token:string ,
-//             reset_password_expire: string,
-//             created_at: Date
-
-// }
+export interface userType {
+            id: string,
+            name:string ,
+            email:string ,
+            password:string,
+            role?:string ,
+            avatar?: string,
+            refresh_token?:string ,
+            reset_password_token?:string ,
+            reset_password_expire?: Date,
+            created_at: Date
+}
 
 export interface DbUser {
             id: string,
             name:string ,
             email:string ,
             password:string,
-            role:string ,
-            avatar: string,
-            refresh_token:string ,
-            reset_password_token:string ,
-            reset_password_expire: string,
+            role?:string ,
+            avatar?: string,
+            refresh_token?:string ,
+            reset_password_token?:string ,
+            reset_password_expire?: Date,
             created_at: Date
 }

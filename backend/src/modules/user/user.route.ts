@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { getUser, loginUser, logoutUser, registerUser } from "./user.controller";
+import { getUser, loginUser, logoutUser, registerUser, updateUserAvatar } from "./user.controller";
 import { verifyJWT } from '../../middleware/auth.middleware';
+import { uploadImage } from "../../middleware/multer.middleware";
 
 const router = Router()
 
@@ -14,5 +15,11 @@ router.get("/get-me" ,getUser)
 
 router.get("/logout",  logoutUser)
 
+router.put("/update-avatar",uploadImage.fields([
+  {
+    name : "avatar",
+    maxCount : 1
+  }
+]) , updateUserAvatar)
 
 export default router;

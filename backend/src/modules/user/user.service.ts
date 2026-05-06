@@ -3,6 +3,7 @@ import { database } from "../../config/db";
 import { ApiError } from "../../utils/ApiError";
 import { generateAccessToken, generateRefreshToken } from "../../utils/token";
 import { DbUser, userType } from './user.types';
+import uploadAvatar from "../../config/cloudinary";
 
 const generateAccessRefreshToken  = async(user:any) => {
     try {
@@ -118,14 +119,39 @@ export const logoutUserService = (async(user:DbUser)=> {
 
 })
 
-// export const userAvatarUpdateService = (async(user : userType, avatar : string )=>{
+export const userAvatarUpdateService = (async(user : userType, avatar : string )=>{
 
-//     const findUser = await database.query(`
-//                UPDATE users SET avatar =$1 WHERE id = $2 RETURNING *`,
-//             [avatar, user.id]
-//       `)
+    if(!user) {
+      throw new ApiError(400,"User not found")
+    }
+    console.log(user);
 
-//   return {
 
-//   }
-// })
+    if(!avatar) {
+      throw new ApiError(400,"Avatar didn't find")
+    }
+
+   const { url } =  await  uploadAvatar(avatar)
+
+   console.log("log", url);
+
+
+
+    const findUser = await database.query(`
+               UPDATE users SET avatar= $1 WHERE id = $2 RETURNING *`,
+            [url, user.id]
+      )
+
+      console.log("findUser", findUser);
+
+
+      if(findUser.rows[0] < 0) {
+        throw new ApiError(400, "User avatar can't update")
+      }
+
+
+  return {
+      findUser
+  }
+})
+

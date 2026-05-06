@@ -1,7 +1,8 @@
 import { database } from "../../config/db";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { asyncHandler } from "../../utils/asyncHandler";
-import { loginUserService, registerUserService, logoutUserService } from './user.service';
+import { loginUserService, registerUserService, logoutUserService, userAvatarUpdateService } from './user.service';
+import { DbUser } from './user.types';
 
 const options = {
     httpOnly : true,
@@ -65,13 +66,10 @@ export const getUser =  asyncHandler(async(req,res)=>{
 
 export const updateUserAvatar = asyncHandler(async(req,res)=>{
 
-
-  const { avatar } = req.file
-
+   const  avatar  = req.files.avatar[0].path
   const user = req.user
 
-   await userAvatarUpdateService(avatar, user)
-
+  await userAvatarUpdateService(user,avatar)
 
   return res.status(200).json(new ApiResponse(200,{}, "User Avatar Update Successfully"))
 })
