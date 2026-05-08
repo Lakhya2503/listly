@@ -5,7 +5,8 @@ export const createTables = async() => {
   try {
       await createUserTable()
       await todoTable()
-      console.error("🗃️  TABLES CREATE SUCCESSFULLY")
+      // console.log("🗃️  TABLES CREATE SUCCESSFULLY")
+      console.log("🗃️ 👍 ")
   } catch (error) {
       console.error("❌ table can't creates" + error)
   }

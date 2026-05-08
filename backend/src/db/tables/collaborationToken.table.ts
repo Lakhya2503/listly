@@ -1,9 +1,9 @@
 import { database } from "../../config/db";
 
-export const createUserTable =async function () {
+export const collaborationTokenTable =async function () {
   try {
       const query = `
-          CREATE TABLE IF NOT EXISTS users (
+          CREATE TABLE IF NOT EXISTS collaborationToken (
             id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
             name VARCHAR(100) NOT NULL CHECK (char_length(name) >= 3),
             email VARCHAR(100) UNIQUE NOT NULL,

@@ -14,7 +14,8 @@ export const database = new Pool({
 const connectDb =  async ()=> {
  try {
       await database.connect()
-      console.log("📊 DATABASE CONNECTED SUCCESSFULLY "+ database)
+      // console.log("📊 DATABASE CONNECTED SUCCESSFULLY "+ database)
+      console.log("📊👍")
  } catch (error) {
       console.error("❌ ERROR ON CONNECTING DATABASE " + error);
       process.exit(1)

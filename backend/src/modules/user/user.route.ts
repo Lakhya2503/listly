@@ -9,7 +9,7 @@ router.post("/register", registerUser)
 
 router.post("/login", loginUser)
 
-router.use(verifyJWT as any)
+router.use( verifyJWT as any)
 
 router.get("/get-me" ,getUser)
 

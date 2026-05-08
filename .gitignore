@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+*.svg
+*.env
+*.md
+
+# ! -- remove when start frontend
+
+*.html

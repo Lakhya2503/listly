@@ -38,7 +38,8 @@ export const todoTable = async () => {
       CREATE INDEX IF NOT EXISTS idx_todo_user_id ON todo(user_id)
     `)
 
-    console.log("📋✅ Todo & TodoList Tables created successfully");
+    // console.log("📋✅ Todo & TodoList Tables created successfully");
+          console.log("📋👍");
   } catch (error: { message: string } | any) {
     console.error(" ❌ DB ERROR", error)
     throw new ApiError(400, " ❌ Todo Table can't create", error?.mesage);
