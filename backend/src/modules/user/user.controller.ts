@@ -1,4 +1,5 @@
 import { database } from "../../config/db";
+import { ApiError } from "../../utils/ApiError";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { loginUserService, registerUserService, logoutUserService, userAvatarUpdateService } from './user.service';
@@ -66,10 +67,14 @@ export const getUser =  asyncHandler(async(req,res)=>{
 
 export const updateUserAvatar = asyncHandler(async(req,res)=>{
 
+  console.log("req.file",req.file);
    const  avatar  = req.files.avatar[0].path
+
   const user = req.user
 
-  await userAvatarUpdateService(user,avatar)
+  const avatarUrl = avatar
 
-  return res.status(200).json(new ApiResponse(200,{}, "User Avatar Update Successfully"))
+  const { updateAvatar } = await userAvatarUpdateService(user, avatarUrl)
+
+  return res.status(200).json(new ApiResponse(200,updateAvatar, "User Avatar Update Successfully"))
 })

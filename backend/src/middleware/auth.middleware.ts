@@ -4,6 +4,7 @@ import { database } from "../config/db";
 import { ENV } from "../config/env";
 import { AuthRequest, DbUser, jwtTokenType } from "../modules/user/user.types";
 import { ApiError } from "../utils/ApiError";
+import { findSafeUser } from '../utils/helper';
 
 export const verifyJWT = async (
       req:AuthRequest,
@@ -26,18 +27,13 @@ export const verifyJWT = async (
 
     const decodedToken = decoded as jwtTokenType;
 
-    const user = await database.query(
-      `SELECT * FROM users WHERE id = $1`,
-      [decodedToken.id]
-    );
+    const { safeUser } = await findSafeUser(decodedToken.id)
 
-    const requser: DbUser = user.rows[0];
-
-    if (!requser) {
+    if (!safeUser) {
       return next(new ApiError(401, "Token used or invalid"));
     }
 
-    req.user = requser;
+    req.user = safeUser;
 
     next();
   } catch (error: any) {

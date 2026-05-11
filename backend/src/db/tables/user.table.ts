@@ -9,7 +9,7 @@ export const createUserTable =async function () {
             email VARCHAR(100) UNIQUE NOT NULL,
             password TEXT NOT NULL,
             role VARCHAR(10) DEFAULT 'User' Check (role IN('User',  'Admin')),
-            avatar JSONB DEFAULT NULL,
+            avatar TEXT DEFAULT NULL,
             refreshtoken TEXT DEFAULT NULL,
             reset_password_token TEXT DEFAULT NULL,
             reset_password_expire TIMESTAMP DEFAULT NULL,

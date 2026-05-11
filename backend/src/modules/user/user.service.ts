@@ -4,6 +4,7 @@ import { ApiError } from "../../utils/ApiError";
 import { generateAccessToken, generateRefreshToken } from "../../utils/token";
 import { DbUser, userType } from './user.types';
 import uploadAvatar from "../../config/cloudinary";
+import { findSafeUser } from "../../utils/helper";
 
 const generateAccessRefreshToken  = async(user:any) => {
     try {
@@ -41,8 +42,10 @@ export const registerUserService = async ({
           password: string;
       }) => {
 
-  if (!name || !email || !password) {
-    throw new ApiError(400, "All fields are required");
+    if([name, email, password].some((field : string) =>
+      field.trim() === "" || field === undefined
+  )) {
+    throw new ApiError(400, "All fields are required")
   }
 
   const userAlreadyExist: any = await database.query(
@@ -61,8 +64,11 @@ export const registerUserService = async ({
     [name, email, hashedPassword]
   );
 
-  const { accessToken, refreshToken } =
-    await generateAccessRefreshToken(user.rows[0]);
+  const  { safeUser }  = await findSafeUser(user.rows[0].id)
+
+    const { accessToken, refreshToken} = await generateAccessRefreshToken(user.rows[0])
+
+
 
   return {
     user: user.rows[0],
@@ -119,7 +125,7 @@ export const logoutUserService = (async(user:DbUser)=> {
 
 })
 
-export const userAvatarUpdateService = (async(user : userType, avatar : string )=>{
+export const userAvatarUpdateService = (async(user : userType, avatarUrl : string )=>{
 
     if(!user) {
       throw new ApiError(400,"User not found")
@@ -127,31 +133,33 @@ export const userAvatarUpdateService = (async(user : userType, avatar : string )
     console.log(user);
 
 
-    if(!avatar) {
+    if(!avatarUrl) {
       throw new ApiError(400,"Avatar didn't find")
     }
 
-   const { url } =  await  uploadAvatar(avatar)
+   const avatar =  await  (await uploadAvatar(avatarUrl))?.url
 
-   console.log("log", url);
+   console.log(avatar);
 
 
+   console.log("log", avatar);
 
-    const findUser = await database.query(`
-               UPDATE users SET avatar= $1 WHERE id = $2 RETURNING *`,
-            [url, user.id]
+
+    const updateAvatar = await database.query(`
+               UPDATE users SET avatar = $1 WHERE id = $2 RETURNING *`,
+            [avatar, user.id]
       )
 
-      console.log("findUser", findUser);
+      console.log("findUser", updateAvatar.rows[0]);
 
 
-      if(findUser.rows[0] < 0) {
-        throw new ApiError(400, "User avatar can't update")
+      if(updateAvatar.rows[0] < 0) {
+        throw new ApiError(400, "USER CAN'T FIND")
       }
 
+      const { safeUser } = await findSafeUser(updateAvatar.rows[0].id)
 
   return {
-      findUser
+     updateAvatar : safeUser
   }
 })
-
