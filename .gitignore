@@ -30,3 +30,4 @@ dist-ssr
 # ! -- remove when start frontend
 
 *.html
+*.jpg
